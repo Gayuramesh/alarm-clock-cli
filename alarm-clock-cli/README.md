@@ -1,139 +1,23 @@
 # Python CLI Alarm Clock
 
-## Overview
+A simple, modular command-line Alarm Clock application built in Python.
 
-This project is a simple Alarm Clock application built using Python as a Command Line Interface (CLI) application. The objective was to build a clean, maintainable solution while making appropriate engineering decisions within a limited time.
-
-The application runs entirely in the terminal and does not use a web interface, database, or external frameworks.
-
----
-
-# Problem Statement
-
-Build a Python CLI Alarm Clock application that allows users to create and manage alarms. Since the assignment does not include a detailed specification, the scope and implementation decisions were defined before development.
-
----
-
-# Requirements
-
-The application should allow users to:
-
-* Create an alarm
-* View all alarms
-* Delete an alarm
-* Notify the user when an alarm time is reached
-* Exit the application gracefully
-
----
-
-# Non-Functional Requirements
-
-* Python CLI application only
-* No web UI
-* No React
-* No database
-* Clean and modular code
-* Easy to understand and maintain
-* Input validation for user entries
-
----
-
-# Assumptions
-
-To keep the project focused and complete within the given time, the following assumptions were made:
-
-* Alarms are stored only in memory.
-* Alarm data is lost once the application exits.
-* Alarm precision is one minute.
-* Multiple alarms are supported.
-* Internet access is not required.
+The application allows users to create, view, and delete alarms while continuously monitoring scheduled alarms in the background. The solution focuses on clean architecture, maintainability, and engineering best practices rather than unnecessary features.
 
 ---
 
 # Features
 
-* Add a new alarm
+* Add alarms using `HH:MM` (24-hour) format
 * View all scheduled alarms
-* Delete an existing alarm
-* Automatic alarm notification
-* Input validation
-* Graceful application exit
-
----
-
-# Features Not Included
-
-The following features were intentionally excluded because they were outside the scope of this exercise:
-
-* Persistent storage
-* Snooze functionality
-* Recurring alarms
-* Custom alarm sounds
-* Time zone support
-* Graphical User Interface (GUI)
-
----
-
-# Architecture
-
-The application follows a simple modular architecture.
-
-```text
-User
-   │
-   ▼
-CLI Interface
-   │
-   ▼
-Alarm Manager
-   │
-   ▼
-Scheduler
-   │
-   ▼
-Console Notification
-```
-
----
-
-# Engineering Decisions
-
-### Why CLI?
-
-The assignment explicitly requested a Command Line Interface application.
-
-### Why No Database?
-
-The assignment specifically stated that no database should be used. Therefore, alarms are maintained in memory during execution.
-
-### Why In-Memory Storage?
-
-Since persistence was not required, storing alarms in memory keeps the implementation lightweight and avoids unnecessary complexity.
-
-### Why Modular Design?
-
-Separating the CLI, alarm management, scheduler, and utility logic improves readability, maintainability, and future extensibility.
-
-### Why Python Standard Library?
-
-The implementation primarily relies on Python's standard library to minimize dependencies while providing reliable functionality.
-
----
-
-# AI Usage
-
-AI was used during the planning and development process to improve productivity and engineering quality.
-
-AI assisted with:
-
-* Refining project requirements
-* Discussing possible architecture
-* Creating an implementation plan
-* Reviewing implementation ideas
-* Identifying edge cases
-* Improving documentation
-
-All AI-generated suggestions were reviewed, validated, and adapted before being included in the final solution.
+* Delete existing alarms
+* Prevent duplicate alarms
+* Automatically sort alarms by time
+* Background scheduler using threads
+* Trigger each alarm only once
+* Input validation with user-friendly error messages
+* Modular and extensible project structure
+* Unit tests for core functionality
 
 ---
 
@@ -143,11 +27,12 @@ All AI-generated suggestions were reviewed, validated, and adapted before being 
 alarm-clock-cli/
 │
 ├── alarm_clock/
+│   ├── __init__.py
 │   ├── alarm.py
+│   ├── alarm_manager.py
 │   ├── scheduler.py
 │   ├── cli.py
-│   ├── utils.py
-│   └── __init__.py
+│   └── utils.py
 │
 ├── tests/
 │   └── test_alarm.py
@@ -160,83 +45,315 @@ alarm-clock-cli/
 
 ---
 
-# How to Run
+# Requirements
 
-1. Clone the repository.
+* Python 3.10 or later
+* No external libraries required
 
-2. Navigate to the project directory.
+---
 
-3. Run the application.
+# Installation
+
+Clone the repository.
+
+```bash
+git clone <repository-url>
+cd alarm-clock-cli
+```
+
+No additional packages are required.
+
+---
+
+# Running the Application
+
+Start the application by running:
 
 ```bash
 python main.py
 ```
 
----
-
-# Example Workflow
+You will see the interactive menu:
 
 ```text
+==================================================
+        PYTHON CLI ALARM CLOCK
+==================================================
 1. Add Alarm
 2. View Alarms
 3. Delete Alarm
 4. Exit
-
-Choose an option: 1
-
-Enter alarm time (HH:MM): 07:30
-
-Alarm added successfully.
+==================================================
 ```
 
-When the scheduled time is reached:
+---
+
+# Usage
+
+## Add Alarm
+
+Choose:
 
 ```text
-********************************
-ALARM!
-Time: 07:30
-Wake up!
-********************************
+1
 ```
+
+Enter the alarm time in 24-hour format:
+
+```text
+07:30
+```
+
+Example output:
+
+```text
+Alarm scheduled for 07:30
+```
+
+---
+
+## View Alarms
+
+Choose:
+
+```text
+2
+```
+
+Example:
+
+```text
+Scheduled Alarms
+
+1. 07:30    Pending
+2. 18:00    Pending
+```
+
+---
+
+## Delete Alarm
+
+Choose:
+
+```text
+3
+```
+
+Select the alarm number to remove.
+
+Example:
+
+```text
+Enter alarm number to delete: 1
+
+Alarm deleted successfully.
+```
+
+---
+
+# Architecture
+
+The application follows a modular design with clear separation of responsibilities.
+
+```text
+main.py
+   │
+   ▼
+AlarmCLI
+   │
+   ▼
+AlarmManager
+   │
+   ▼
+Alarm
+   │
+   ▼
+Scheduler
+```
+
+## Component Responsibilities
+
+### main.py
+
+* Starts the application
+* Displays the menu
+* Starts the background scheduler
+
+### AlarmCLI
+
+Responsible only for user interaction.
+
+* Reads user input
+* Displays messages
+* Delegates business logic to the AlarmManager
+
+### AlarmManager
+
+Contains all business logic.
+
+Responsibilities:
+
+* Add alarms
+* Delete alarms
+* List alarms
+* Validate duplicate alarms
+* Keep alarms sorted
+
+### Alarm
+
+Represents a single alarm object.
+
+Stores:
+
+* Alarm time
+* Trigger status
+
+### Scheduler
+
+Runs in a background daemon thread.
+
+Responsibilities:
+
+* Continuously monitor alarms
+* Trigger alarms when scheduled
+* Prevent duplicate triggering
+
+### utils.py
+
+Contains helper functions.
+
+Currently responsible for:
+
+* Parsing and validating alarm time
+
+---
+
+# Design Decisions
+
+Several design decisions were made to keep the solution simple, maintainable, and aligned with the assignment requirements.
+
+## Object-Oriented Design
+
+Each alarm is represented as an object using a Python dataclass, making the model clean and easy to extend.
+
+## Separation of Concerns
+
+Business logic is isolated inside `AlarmManager`, while the CLI only handles user interaction. This keeps the code easier to maintain and test.
+
+## Background Scheduler
+
+The scheduler runs in a daemon thread, allowing alarm monitoring to continue while the application remains responsive to user input.
+
+## In-Memory Storage
+
+Alarms are stored in memory because the assignment explicitly requested a CLI application without requiring database persistence.
+
+## Standard Library Only
+
+The application uses only Python's standard library, avoiding unnecessary dependencies while keeping setup simple.
+
+---
+
+# Validation
+
+The application validates user input before creating alarms.
+
+Examples of rejected input:
+
+```text
+99:99
+25:00
+07-30
+abcd
+7:3
+```
+
+Duplicate alarms are also prevented.
 
 ---
 
 # Testing
 
-The application will be tested for:
+Unit tests are included for the core functionality.
 
-* Valid time format
+Run all tests using:
+
+```bash
+python -m unittest discover tests
+```
+
+Current tests cover:
+
+* Valid alarm creation
 * Invalid time format
-* Multiple alarms
-* Alarm deletion
-* Alarm triggering
-* Invalid menu selection
+* Duplicate alarm prevention
+* Invalid delete operations
 
 ---
 
-# Limitations
+# Error Handling
 
-* Alarm data is not saved after the application exits.
-* Notifications are displayed only in the terminal.
-* Alarm precision is limited to one minute.
+The application handles common user errors gracefully.
+
+Examples include:
+
+* Invalid time format
+* Duplicate alarms
+* Invalid menu choices
+* Invalid delete selection
+* Empty alarm list
+
+---
+
+# AI Usage
+
+AI was used as a development assistant during the implementation process.
+
+It helped with:
+
+* Reviewing project architecture
+* Improving code organization
+* Identifying edge cases
+* Suggesting refactoring opportunities
+* Improving documentation
+* Reviewing code quality
+
+All generated suggestions were manually reviewed, validated, and adapted before being incorporated into the final implementation.
+
+---
+
+# Assumptions
+
+* Time is entered in 24-hour format (`HH:MM`).
+* Alarms exist only while the application is running.
+* Each alarm triggers only once.
+* If the entered time has already passed for the current day, the alarm is scheduled for the next day.
 
 ---
 
 # Future Improvements
 
-Given additional development time, the following enhancements could be implemented:
+Given additional time, the following enhancements could be implemented:
 
-* Persistent storage using a file or database
-* Snooze functionality
+* Persistent alarm storage (JSON or SQLite)
 * Recurring alarms
-* Custom notification sounds
-* Desktop notifications
-* Time zone support
+* Snooze functionality
+* Custom alarm labels
+* Sound notifications
+* Logging
 * Configuration file support
-* Automated test coverage
+* Additional unit and integration tests
+
+---
+
+# Engineering Trade-offs
+
+The focus of this implementation was maintainability, readability, and clean separation of responsibilities rather than maximizing the number of features.
+
+Instead of introducing external dependencies or persistent storage, the application keeps alarms in memory and relies solely on Python's standard library. This keeps the solution lightweight while still demonstrating sound software engineering principles.
 
 ---
 
 # Conclusion
 
-The primary objective of this project was to demonstrate engineering decision-making, clean architecture, modular implementation, and effective use of AI during the software development process, rather than maximizing the number of features.
+This project demonstrates a modular, maintainable, and extensible Python CLI application that satisfies the assignment requirements while following clean coding practices and software design principles.
