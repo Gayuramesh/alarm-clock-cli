@@ -1,12 +1,26 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
-def validate_time(time_str: str) -> bool:
+def parse_alarm_time(time_str: str):
     """
-    Validate whether the input is in HH:MM format.
+    Parse HH:MM and return the next occurrence of that time.
     """
     try:
-        datetime.strptime(time_str, "%H:%M")
-        return True
+        parsed = datetime.strptime(time_str, "%H:%M")
+
+        now = datetime.now()
+
+        alarm_time = now.replace(
+            hour=parsed.hour,
+            minute=parsed.minute,
+            second=0,
+            microsecond=0,
+        )
+
+        if alarm_time <= now:
+            alarm_time += timedelta(days=1)
+
+        return alarm_time
+
     except ValueError:
-        return False
+        return None
