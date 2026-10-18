@@ -20,14 +20,12 @@ class TestAlarmManager(unittest.TestCase):
 
     def test_add_alarm(self):
         success, message = self.manager.add_alarm("07:30")
-
         self.assertTrue(success)
         self.assertEqual(message, "Alarm added successfully.")
         self.assertEqual(len(self.manager.list_alarms()), 1)
 
     def test_update_alarm(self):
         self.manager.add_alarm("07:30")
-
         success, message = self.manager.update_alarm(0, "08:30")
 
         self.assertTrue(success)
@@ -39,7 +37,6 @@ class TestAlarmManager(unittest.TestCase):
 
     def test_update_alarm_invalid_time(self):
         self.manager.add_alarm("07:30")
-
         success, message = self.manager.update_alarm(0, "25:61")
 
         self.assertFalse(success)
@@ -58,7 +55,6 @@ class TestAlarmManager(unittest.TestCase):
     def test_update_alarm_duplicate_time(self):
         self.manager.add_alarm("07:30")
         self.manager.add_alarm("09:30")
-
         success, message = self.manager.update_alarm(0, "09:30")
 
         self.assertFalse(success)
@@ -66,7 +62,6 @@ class TestAlarmManager(unittest.TestCase):
             message,
             "An alarm already exists for this time.",
         )
-
         self.assertEqual(
             self.manager.list_alarms()[0].display_time,
             "07:30",
