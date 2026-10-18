@@ -62,3 +62,38 @@ class AlarmCLI:
 
         except ValueError:
             print("\n❌ Please enter a valid number.")
+
+    def update_alarm(self):
+        alarms = self.manager.list_alarms()
+
+        if not alarms:
+            print("\nNo alarms available to update.")
+            return
+
+        self.view_alarms()
+
+        try:
+            choice = int(
+                input("\nEnter alarm number to update: ")
+            ) - 1
+
+            if not 0 <= choice < len(alarms):
+                print("\nInvalid alarm number.")
+                return
+
+            new_time = input(
+                "Enter new alarm time (HH:MM): "
+            ).strip()
+
+            success, message = self.manager.update_alarm(
+                choice,
+                new_time,
+            )
+
+            if success:
+                print(f"\n{message}")
+            else:
+                print(f"\nError: {message}")
+
+        except ValueError:
+            print("\nPlease enter a valid alarm number.")
