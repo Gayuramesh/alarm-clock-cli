@@ -72,6 +72,19 @@ class TestAlarmManager(unittest.TestCase):
             "07:30",
         )
 
+    def test_add_alarm_duplicate_unpadded_time(self):
+        success, _ = self.manager.add_alarm("07:30")
+        self.assertTrue(success)
+
+        success, message = self.manager.add_alarm("7:30")
+
+        self.assertFalse(success)
+        self.assertEqual(
+            message,
+            "An alarm already exists for this time.",
+        )
+        self.assertEqual(len(self.manager.list_alarms()), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
