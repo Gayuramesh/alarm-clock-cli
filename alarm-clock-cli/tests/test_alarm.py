@@ -1,3 +1,4 @@
+
 import unittest
 
 from alarm_clock.utils import parse_alarm_time
@@ -75,9 +76,9 @@ class TestAlarmManager(unittest.TestCase):
     def test_add_alarm_duplicate_unpadded_time(self):
         success, _ = self.manager.add_alarm("07:30")
         self.assertTrue(success)
-    
+
         success, message = self.manager.add_alarm("7:30")
-    
+
         self.assertFalse(success)
         self.assertEqual(
             message,
