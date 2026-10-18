@@ -21,7 +21,7 @@ class AlarmManager:
             for alarm in self.alarms
         ):
             return False, "An alarm already exists for this time."
-
+    
         self.alarms.append(Alarm(alarm_time))
         self.alarms.sort(key=lambda alarm: alarm.alarm_time)
 
