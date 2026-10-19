@@ -90,19 +90,25 @@ class TestAlarmCLI(unittest.TestCase):
         self.cli = AlarmCLI()
         self.cli.manager = self.manager
 
-    @patch("builtins.input", side_effect=["1", "y"])
-    def test_delete_alarm_confirmed(self, mock_input):
-        with patch("builtins.print"):
-            self.cli.delete_alarm()
-
-        self.assertEqual(len(self.manager.list_alarms()), 0)
-
-    @patch("builtins.input", side_effect=["1", "n"])
-    def test_delete_alarm_cancelled(self, mock_input):
-        with patch("builtins.print"):
+    @patch("builtins.input", side_effect=["1", "x"])
+    def test_delete_alarm_invalid_confirmation(self, mock_input):
+        with patch("builtins.print") as mock_print:
             self.cli.delete_alarm()
 
         self.assertEqual(len(self.manager.list_alarms()), 1)
+        mock_print.assert_any_call(
+            "\n❌ Invalid confirmation. Enter y or n."
+        )
+
+    @patch("builtins.input", side_effect=["abc"])
+    def test_delete_alarm_invalid_number(self, mock_input):
+        with patch("builtins.print") as mock_print:
+            self.cli.delete_alarm()
+
+        self.assertEqual(len(self.manager.list_alarms()), 1)
+        mock_print.assert_any_call(
+            "\n❌ Please enter a valid alarm number."
+        )
 
 if __name__ == "__main__":
     unittest.main()
