@@ -57,8 +57,11 @@ class AlarmCLI:
                 print("\n❌ Invalid alarm number.")
                 return
 
+            alarm_time = alarms[choice].display_time
+
             confirmation = input(
-                "Are you sure you want to delete this alarm? (y/n): "
+                f"Are you sure you want to delete the alarm at "
+                f"{alarm_time}? (y/n): "
             ).strip().lower()
 
             if confirmation == "y":
