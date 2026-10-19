@@ -111,3 +111,23 @@ class AlarmCLI:
 
         except ValueError:
             print("\nPlease enter a valid alarm number.")
+
+    def clear_all_alarms(self):
+        alarms = self.manager.list_alarms()
+
+        if not alarms:
+            print("\nNo alarms available.")
+            return
+
+        confirmation = input(
+            f"Are you sure you want to delete all "
+            f"{len(alarms)} alarms? (y/n): "
+        ).strip().lower()
+
+        if confirmation == "y":
+            success, message = self.manager.clear_all_alarms()
+            print(f"\n{message}")
+        elif confirmation == "n":
+            print("\nAlarm deletion cancelled.")
+        else:
+            print("\nInvalid confirmation. Enter y or n.")
