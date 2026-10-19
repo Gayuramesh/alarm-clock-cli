@@ -40,7 +40,6 @@ class AlarmCLI:
         print("-" * 40)
 
     def delete_alarm(self):
-
         alarms = self.manager.list_alarms()
 
         if not alarms:
@@ -50,18 +49,30 @@ class AlarmCLI:
         self.view_alarms()
 
         try:
-
             choice = int(
                 input("\nEnter alarm number to delete: ")
             ) - 1
 
-            if self.manager.delete_alarm(choice):
-                print("\n✅ Alarm deleted successfully.")
-            else:
+            if not 0 <= choice < len(alarms):
                 print("\n❌ Invalid alarm number.")
+                return
+
+            confirmation = input(
+                "Are you sure you want to delete this alarm? (y/n): "
+            ).strip().lower()
+
+            if confirmation == "y":
+                if self.manager.delete_alarm(choice):
+                    print("\n✅ Alarm deleted successfully.")
+                else:
+                    print("\n❌ Unable to delete alarm.")
+            elif confirmation == "n":
+                print("\nAlarm deletion cancelled.")
+            else:
+                print("\n❌ Invalid confirmation. Enter y or n.")
 
         except ValueError:
-            print("\n❌ Please enter a valid number.")
+            print("\n❌ Please enter a valid alarm number.")
 
     def update_alarm(self):
         alarms = self.manager.list_alarms()
