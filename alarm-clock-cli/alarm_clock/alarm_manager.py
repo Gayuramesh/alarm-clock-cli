@@ -56,3 +56,10 @@ class AlarmManager:
             return True
 
         return False
+
+    def clear_all_alarms(self):
+        if not self.alarms:
+            return False, "No alarms available."
+
+        self.alarms.clear()
+        return True, "All alarms cleared successfully."
