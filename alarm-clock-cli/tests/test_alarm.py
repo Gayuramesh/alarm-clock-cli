@@ -124,5 +124,24 @@ class TestAlarmCLI(unittest.TestCase):
             "\n❌ Please enter a valid alarm number."
         )
 
+    def test_clear_all_alarms(self):
+        self.manager.add_alarm("07:30")
+        self.manager.add_alarm("09:30")
+
+        success, message = self.manager.clear_all_alarms()
+
+        self.assertTrue(success)
+        self.assertEqual(message, "All alarms cleared successfully.")
+        self.assertEqual(len(self.manager.list_alarms()), 0)
+
+    def test_clear_all_alarms_when_empty(self):
+        self.manager.alarms.clear()
+
+        success, message = self.manager.clear_all_alarms()
+
+        self.assertFalse(success)
+        self.assertEqual(message, "No alarms available.")
+        self.assertEqual(len(self.manager.list_alarms()), 0)
+
 if __name__ == "__main__":
     unittest.main()
