@@ -9,6 +9,7 @@ def print_menu():
     print("2. 📋 View Alarms")
     print("3. 🗑 Delete Alarm")
     print("4. 🚪 Exit")
+    print("5. Clear All Alarms")
     print("=" * 50)
 
 def main():
@@ -39,9 +40,10 @@ def main():
             print("\nThank you for using Python CLI Alarm Clock.")
             print("Have a productive day!\n")
             break
-
+        elif choice == "5":
+            cli.clear_all_alarms()
         else:
-            print("\n❌ Invalid choice. Please select 1-4.")
+            print("Invalid choice. Please select 1-5.")
 
 
 if __name__ == "__main__":
