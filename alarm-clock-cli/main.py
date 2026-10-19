@@ -43,7 +43,7 @@ def main():
         elif choice == "5":
             cli.clear_all_alarms()
         else:
-            print("\n❌ Invalid choice. Please select 1-4.")
+            print("Invalid choice. Please select 1-5.")
 
 
 if __name__ == "__main__":
