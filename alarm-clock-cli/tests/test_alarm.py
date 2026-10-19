@@ -2,7 +2,8 @@ import unittest
 
 from alarm_clock.utils import parse_alarm_time
 from alarm_clock.alarm_manager import AlarmManager
-
+from unittest.mock import patch
+from alarm_clock.cli import AlarmCLI
 
 class TestAlarm(unittest.TestCase):
 
