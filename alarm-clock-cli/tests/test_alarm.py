@@ -81,5 +81,27 @@ class TestAlarmManager(unittest.TestCase):
         self.assertEqual(len(self.manager.list_alarms()), 1)
 
 
+class TestAlarmCLI(unittest.TestCase):
+
+    def setUp(self):
+        self.manager = AlarmManager()
+        self.manager.add_alarm("07:30")
+        self.cli = AlarmCLI()
+        self.cli.manager = self.manager
+
+    @patch("builtins.input", side_effect=["1", "y"])
+    def test_delete_alarm_confirmed(self, mock_input):
+        with patch("builtins.print"):
+            self.cli.delete_alarm()
+
+        self.assertEqual(len(self.manager.list_alarms()), 0)
+
+    @patch("builtins.input", side_effect=["1", "n"])
+    def test_delete_alarm_cancelled(self, mock_input):
+        with patch("builtins.print"):
+            self.cli.delete_alarm()
+
+        self.assertEqual(len(self.manager.list_alarms()), 1)
+
 if __name__ == "__main__":
     unittest.main()
